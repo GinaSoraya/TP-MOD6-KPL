@@ -1,5 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using System.Diagnostics;
+
 class Program
 {
     class SayaTubeVideo
@@ -13,11 +15,23 @@ class Program
             this.title = title;
             random input = new random();
             id = input.id();
-            this.playCount = 0;
+            playCount = 0;
+            Debug.Assert(title.Length < 100 && title != null);
+            
         }
         public void IncreasePlayCount(int playCount)
         {
-            playCount++;
+            Debug.Assert(playCount < 10000000);
+            try
+            {
+                checked
+                {
+                    this.playCount = playCount;
+                }
+            }
+            catch (OverflowException) {
+                Console.WriteLine("Penambahan play count");
+            }
         }
         public void PrintVideoDetails()
         {
@@ -29,6 +43,7 @@ class Program
     public static void Main(String[] args)
     {
         SayaTubeVideo input = new SayaTubeVideo("Tutorial Design By Contract - GINA SORAYA");
+        input.IncreasePlayCount(int.MaxValue);
         input.PrintVideoDetails();
     }
     class random
